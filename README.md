@@ -107,6 +107,13 @@ var styles = {
 };
 ```
 
+The generated `App.less.d.ts` file looks like this:
+
+```ts
+export const myClass: string;
+export const myOtherClass: string;
+```
+
 You can then use that style object with an element:
 
 ```jsx

@@ -1,6 +1,6 @@
 {
   "name": "react-native-typed-less-transformer",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "description": "Less transformer with Typescript support for React Native",
   "main": "index.js",
   "repository": "https://github.com/kristerkari/react-native-typed-less-transformer",

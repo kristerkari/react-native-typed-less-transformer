@@ -36,6 +36,22 @@ function isPlatformSpecific(filename) {
   return platformSpecific.some(name => filename.endsWith(name));
 }
 
+function renderToCSS({ src, filename, options }) {
+  var lessPromise = new Promise((resolve, reject) => {
+    less
+      .render(src, { paths: [path.dirname(filename), appRoot] })
+      .then(result => {
+        resolve(result.css);
+      })
+      .catch(reject);
+  });
+  return lessPromise;
+}
+
+function renderCSSToReactNative(css) {
+  return css2rn(css, { parseMediaQueries: true });
+}
+
 module.exports.transform = function(src, filename, options) {
   if (typeof src === "object") {
     // handle RN >= 0.46
@@ -43,29 +59,29 @@ module.exports.transform = function(src, filename, options) {
   }
 
   if (filename.endsWith(".less")) {
-    return less
-      .render(src, { paths: [path.dirname(filename), appRoot] })
-      .then(result => {
-        var cssObject = css2rn(result.css, { parseMediaQueries: true });
+    return renderToCSS().then(css => {
+      var cssObject = renderCSSToReactNative(css);
 
-        if (isPlatformSpecific(filename)) {
+      if (isPlatformSpecific(filename)) {
+        return upstreamTransformer.transform({
+          src: "module.exports = " + JSON.stringify(cssObject),
+          filename,
+          options
+        });
+      }
+
+      return creator.create(filename, css).then(content => {
+        return content.writeFile().then(() => {
           return upstreamTransformer.transform({
             src: "module.exports = " + JSON.stringify(cssObject),
             filename,
             options
           });
-        }
-
-        return creator.create(filename, result.css).then(content => {
-          return content.writeFile().then(() => {
-            return upstreamTransformer.transform({
-              src: "module.exports = " + JSON.stringify(cssObject),
-              filename,
-              options
-            });
-          });
         });
       });
+    });
   }
   return upstreamTransformer.transform({ src, filename, options });
 };
+
+module.exports.renderToCSS = renderToCSS;

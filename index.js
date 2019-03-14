@@ -59,7 +59,7 @@ module.exports.transform = function(src, filename, options) {
   }
 
   if (filename.endsWith(".less")) {
-    return renderToCSS().then(css => {
+    return renderToCSS({ src, filename, options }).then(css => {
       var cssObject = renderCSSToReactNative(css);
 
       if (isPlatformSpecific(filename)) {

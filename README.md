@@ -141,7 +141,7 @@ You can then use that style object with an element:
 
 ## CSS Custom Properties (CSS variables)
 
-_You need version 0.11.0 or newer_
+_You need version 0.11.1 or newer_
 
 ```css
 :root {

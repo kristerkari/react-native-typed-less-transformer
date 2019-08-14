@@ -51,7 +51,8 @@ If you are using [Expo](https://expo.io/), you also need to add this to `app.jso
 {
   "expo": {
     "packagerOpts": {
-      "config": "metro.config.js"
+      "config": "metro.config.js",
+      "sourceExts": ["ts", "tsx", "less"]
     }
   }
 }
@@ -69,7 +70,7 @@ module.exports = {
     return require.resolve("react-native-typed-less-transformer");
   },
   getSourceExts() {
-    return ["js", "jsx", "less"];
+    return ["ts", "tsx", "less"];
   }
 };
 ```
@@ -84,7 +85,7 @@ If you are using [Expo](https://expo.io/), instead of adding the `rn-cli.config.
 {
   "expo": {
     "packagerOpts": {
-      "sourceExts": ["js", "jsx", "less"],
+      "sourceExts": ["ts", "tsx", "less"],
       "transformer": "node_modules/react-native-typed-less-transformer/index.js"
     }
   }
